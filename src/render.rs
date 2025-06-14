@@ -12,22 +12,26 @@ pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Re
     let stdout = io::stdout();
     let mut handle = stdout.lock();
 
-    for (i, day) in days.iter().enumerate() {
-        if i > 0 && i % 7 == 0 {
-            writeln!(handle)?;
+    // Iterate through days of the week (0-6, where 0 is Sunday)
+    for day_of_week in 0..7 {
+        // For each day of the week, iterate through weeks
+        for week in 0..(days.len() / 7) {
+            let index = week * 7 + day_of_week;
+            if index < days.len() {
+                let day = &days[index];
+                if use_color {
+                    let color = parse_color(&day.color);
+                    execute!(handle, SetForegroundColor(color))?;
+                    write!(handle, "{}", BLOCK)?;
+                    execute!(handle, ResetColor)?;
+                } else {
+                    let block_index = (day.contribution_count as f32 / 10.0).min(4.0) as usize;
+                    write!(handle, "{}", BLOCKS[block_index])?;
+                }
+            }
         }
-
-        if use_color {
-            let color = parse_color(&day.color);
-            execute!(handle, SetForegroundColor(color))?;
-            write!(handle, "{}", BLOCK)?;
-            execute!(handle, ResetColor)?;
-        } else {
-            let block_index = (day.contribution_count as f32 / 10.0).min(4.0) as usize;
-            write!(handle, "{}", BLOCKS[block_index])?;
-        }
+        writeln!(handle)?;
     }
-    writeln!(handle)?;
     Ok(())
 }
 
