@@ -37,11 +37,11 @@ pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Re
 
 fn parse_color(color: &str) -> Color {
     match color {
-        "#ebedf0" => Color::Grey,
-        "#9be9a8" => Color::Green,
-        "#40c463" => Color::Green,
-        "#30a14e" => Color::Green,
-        "#216e39" => Color::Green,
+        "#ebedf0" => Color::Rgb { r: 235, g: 237, b: 240 }, // Light gray
+        "#9be9a8" => Color::Rgb { r: 155, g: 233, b: 168 }, // Light green
+        "#40c463" => Color::Rgb { r: 64, g: 196, b: 99 },   // Medium green
+        "#30a14e" => Color::Rgb { r: 48, g: 161, b: 78 },   // Dark green
+        "#216e39" => Color::Rgb { r: 33, g: 110, b: 57 },   // Darkest green
         _ => Color::White,
     }
 }
