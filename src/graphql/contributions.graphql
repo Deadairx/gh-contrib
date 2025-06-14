@@ -1,4 +1,4 @@
-query Contributions($login: String!) {
+query ContributionsQuery($login: String!) {
   user(login: $login) {
     contributionsCollection {
       contributionCalendar {

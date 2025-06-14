@@ -333,6 +333,7 @@ dependencies = [
  "crossterm",
  "dotenv",
  "graphql_client",
+ "graphql_client_codegen",
  "reqwest",
  "serde",
  "serde_json",

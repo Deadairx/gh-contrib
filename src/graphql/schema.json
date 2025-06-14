@@ -1,0 +1,104 @@
+{
+  "data": {
+    "__schema": {
+      "queryType": {
+        "name": "Query"
+      },
+      "types": [
+        {
+          "name": "Query",
+          "fields": [
+            {
+              "name": "user",
+              "type": {
+                "name": "User",
+                "kind": "OBJECT"
+              }
+            }
+          ]
+        },
+        {
+          "name": "User",
+          "fields": [
+            {
+              "name": "contributionsCollection",
+              "type": {
+                "name": "ContributionsCollection",
+                "kind": "OBJECT"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ContributionsCollection",
+          "fields": [
+            {
+              "name": "contributionCalendar",
+              "type": {
+                "name": "ContributionCalendar",
+                "kind": "OBJECT"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ContributionCalendar",
+          "fields": [
+            {
+              "name": "totalContributions",
+              "type": {
+                "name": "Int",
+                "kind": "SCALAR"
+              }
+            },
+            {
+              "name": "weeks",
+              "type": {
+                "name": "ContributionWeek",
+                "kind": "LIST"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ContributionWeek",
+          "fields": [
+            {
+              "name": "contributionDays",
+              "type": {
+                "name": "ContributionDay",
+                "kind": "LIST"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ContributionDay",
+          "fields": [
+            {
+              "name": "date",
+              "type": {
+                "name": "String",
+                "kind": "SCALAR"
+              }
+            },
+            {
+              "name": "contributionCount",
+              "type": {
+                "name": "Int",
+                "kind": "SCALAR"
+              }
+            },
+            {
+              "name": "color",
+              "type": {
+                "name": "String",
+                "kind": "SCALAR"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+} 
