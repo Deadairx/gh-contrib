@@ -5,8 +5,15 @@ use crossterm::execute;
 use std::io::{self, Write};
 use crate::model::ContributionDay;
 
-const BLOCK: &str = "█";
+const BLOCK: &str = "██";
 const BLOCKS: [&str; 5] = ["░", "▒", "▓", "█", "█"];
+
+// GitHub contribution level colors
+const NO_CONTRIB: &str = "#ebedf0";     // No contributions
+const LIGHT_CONTRIB: &str = "#9be9a8";  // 1-3 contributions
+const MEDIUM_CONTRIB: &str = "#40c463"; // 4-6 contributions
+const HEAVY_CONTRIB: &str = "#30a14e";  // 7-9 contributions
+const MAX_CONTRIB: &str = "#216e39";    // 10+ contributions
 
 pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Result<()> {
     let stdout = io::stdout();
@@ -35,13 +42,18 @@ pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Re
     Ok(())
 }
 
+const DIM: Color = Color::Rgb { r: 0, g: 75, b: 35 };
+const NORMAL: Color = Color::Rgb { r: 0, g: 114, b: 0 };
+const BRIGHT: Color = Color::Rgb { r: 56, g: 176, b: 0 };
+const MAX: Color = Color::Rgb { r: 158, g: 240, b: 26 };
+
 fn parse_color(color: &str) -> Color {
     match color {
-        "#ebedf0" => Color::Rgb { r: 235, g: 237, b: 240 }, // Light gray
-        "#9be9a8" => Color::Rgb { r: 155, g: 233, b: 168 }, // Light green
-        "#40c463" => Color::Rgb { r: 64, g: 196, b: 99 },   // Medium green
-        "#30a14e" => Color::Rgb { r: 48, g: 161, b: 78 },   // Dark green
-        "#216e39" => Color::Rgb { r: 33, g: 110, b: 57 },   // Darkest green
-        _ => Color::White,
+        NO_CONTRIB => Color::Rgb { r: 35, g: 37, b: 40 },
+        MAX_CONTRIB => MAX,
+        HEAVY_CONTRIB => BRIGHT,
+        MEDIUM_CONTRIB => NORMAL,
+        LIGHT_CONTRIB => DIM,
+        _ => Color::Black,
     }
 }
