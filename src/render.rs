@@ -15,6 +15,8 @@ const MEDIUM_CONTRIB: &str = "#40c463"; // 4-6 contributions
 const HEAVY_CONTRIB: &str = "#30a14e";  // 7-9 contributions
 const MAX_CONTRIB: &str = "#216e39";    // 10+ contributions
 
+const CURRENT_WEEK: usize = 1;
+
 pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Result<()> {
     let stdout = io::stdout();
     let mut handle = stdout.lock();
@@ -22,7 +24,7 @@ pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Re
     // Iterate through days of the week (0-6, where 0 is Sunday)
     for day_of_week in 0..7 {
         // For each day of the week, iterate through weeks
-        for week in 0..(days.len() / 7) {
+        for week in 0..((days.len() / 7) + CURRENT_WEEK) {
             let index = week * 7 + day_of_week;
             if index < days.len() {
                 let day = &days[index];
