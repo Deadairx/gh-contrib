@@ -17,7 +17,45 @@ const MAX_CONTRIB: &str = "#216e39";    // 10+ contributions
 
 const CURRENT_WEEK: usize = 1;
 
-pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Result<()> {
+pub enum ColorPaletteKind {
+    Green,
+    Red,
+    Blue,
+}
+
+pub struct ColorPalette {
+    pub dim: Color,
+    pub normal: Color,
+    pub bright: Color,
+    pub max: Color,
+}
+
+impl ColorPalette {
+    pub fn new(kind: ColorPaletteKind) -> Self {
+        match kind {
+            ColorPaletteKind::Green => Self {
+                dim: Color::Rgb { r: 0, g: 75, b: 35 },
+                normal: Color::Rgb { r: 0, g: 114, b: 0 },
+                bright: Color::Rgb { r: 56, g: 176, b: 0 },
+                max: Color::Rgb { r: 158, g: 240, b: 26 },
+            },
+            ColorPaletteKind::Red => Self {
+                dim: Color::Rgb { r: 75, g: 0, b: 0 }, // FILL IN
+                normal: Color::Rgb { r: 114, g: 0, b: 0 }, // FILL IN
+                bright: Color::Rgb { r: 176, g: 56, b: 0 }, // FILL IN
+                max: Color::Rgb { r: 240, g: 158, b: 26 }, // FILL IN
+            },
+            ColorPaletteKind::Blue => Self {
+                dim: Color::Rgb { r: 0, g: 0, b: 75 }, // FILL IN
+                normal: Color::Rgb { r: 0, g: 0, b: 114 }, // FILL IN
+                bright: Color::Rgb { r: 0, g: 56, b: 176 }, // FILL IN
+                max: Color::Rgb { r: 26, g: 158, b: 240 }, // FILL IN
+            },
+        }
+    }
+}
+
+pub fn render_contributions(days: &[ContributionDay], use_color: bool, palette: &ColorPalette) -> io::Result<()> {
     let stdout = io::stdout();
     let mut handle = stdout.lock();
 
@@ -29,7 +67,7 @@ pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Re
             if index < days.len() {
                 let day = &days[index];
                 if use_color {
-                    let color = parse_color(&day.color);
+                    let color = parse_color(&day.color, palette);
                     execute!(handle, SetForegroundColor(color))?;
                     write!(handle, "{}", BLOCK)?;
                     execute!(handle, ResetColor)?;
@@ -44,18 +82,13 @@ pub fn render_contributions(days: &[ContributionDay], use_color: bool) -> io::Re
     Ok(())
 }
 
-const DIM: Color = Color::Rgb { r: 0, g: 75, b: 35 };
-const NORMAL: Color = Color::Rgb { r: 0, g: 114, b: 0 };
-const BRIGHT: Color = Color::Rgb { r: 56, g: 176, b: 0 };
-const MAX: Color = Color::Rgb { r: 158, g: 240, b: 26 };
-
-fn parse_color(color: &str) -> Color {
+fn parse_color(color: &str, palette: &ColorPalette) -> Color {
     match color {
         NO_CONTRIB => Color::Rgb { r: 35, g: 37, b: 40 },
-        MAX_CONTRIB => MAX,
-        HEAVY_CONTRIB => BRIGHT,
-        MEDIUM_CONTRIB => NORMAL,
-        LIGHT_CONTRIB => DIM,
+        MAX_CONTRIB => palette.max,
+        HEAVY_CONTRIB => palette.bright,
+        MEDIUM_CONTRIB => palette.normal,
+        LIGHT_CONTRIB => palette.dim,
         _ => Color::Black,
     }
 }
