@@ -7,7 +7,7 @@ use reqwest::blocking::Client;
 include!(concat!(env!("OUT_DIR"), "/contributions_query.rs"));
 
 pub fn fetch_contributions(user: &str) -> Result<contributions_query::ResponseData, Box<dyn std::error::Error>> {
-    let token = env::var("GITHUB_TOKEN")?;
+    let token = env::var("GITHUB_TOKEN").map_err(|e| format!("{}: 'GITHUB_TOKEN'", e))?;
     let variables = contributions_query::Variables {
         login: user.to_string(),
     };
