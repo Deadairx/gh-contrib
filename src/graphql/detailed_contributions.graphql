@@ -1,0 +1,97 @@
+# graphql_client_type: DateTime=String
+# graphql_client_type: Date=String
+query DetailedContributionsQuery($login: String!, $from: String!, $to: String!) {
+  user(login: $login) {
+    contributionsCollection(from: $from, to: $to) {
+      totalCommitContributions
+      totalIssueContributions
+      totalPullRequestContributions
+      totalPullRequestReviewContributions
+      totalRepositoryContributions
+      
+      issueContributions(first: 100, orderBy: {field: OCCURRED_AT, direction: DESC}) {
+        nodes {
+          issue {
+            title
+            number
+            state
+            createdAt
+            closedAt
+            repository {
+              name
+              nameWithOwner
+            }
+          }
+          occurredAt
+        }
+      }
+      
+      pullRequestContributions(first: 100, orderBy: {field: OCCURRED_AT, direction: DESC}) {
+        nodes {
+          pullRequest {
+            title
+            number
+            state
+            createdAt
+            closedAt
+            mergedAt
+            repository {
+              name
+              nameWithOwner
+            }
+          }
+          occurredAt
+        }
+      }
+      
+      pullRequestReviewContributions(first: 100, orderBy: {field: OCCURRED_AT, direction: DESC}) {
+        nodes {
+          pullRequestReview {
+            state
+            createdAt
+            pullRequest {
+              title
+              number
+              repository {
+                name
+                nameWithOwner
+              }
+            }
+          }
+          occurredAt
+        }
+      }
+      
+      repositoryContributions(first: 100, orderBy: {field: OCCURRED_AT, direction: DESC}) {
+        nodes {
+          repository {
+            name
+            nameWithOwner
+            description
+            createdAt
+            stargazerCount
+            forkCount
+          }
+          occurredAt
+        }
+      }
+      
+      commitContributionsByRepository(maxRepositories: 100) {
+        repository {
+          name
+          nameWithOwner
+        }
+        contributions(first: 100, orderBy: {field: OCCURRED_AT, direction: DESC}) {
+          nodes {
+            occurredAt
+            commitCount
+            repository {
+              name
+              nameWithOwner
+            }
+          }
+        }
+      }
+    }
+  }
+} 
